@@ -1,32 +1,26 @@
-# I am terrible at make, but here goes anyway:
+CC            = gcc
+CFLAGS        =
+TARGET_VER    = 319.32 # just set to a valid ver eg. one of:  325.08 319.32 319.23
+TARGET        = libnvidia-ml.so.1
+DESTDIR       = /
+PREFIX        = $(DESTDIR)usr/local
+libdir        = $(PREFIX)/lib
+INSTALL       = /usr/bin/install -D
 
-CC=gcc
-CFLAGS=
+all: $(TARGET)
 
-all: 325.08 319.32 319.23
+empty.o: empty.c 
+	${CC} ${CFLAGS} -shared -fPIC $(<) -o $(@) 
 
-empty.so:
-	mkdir -p .tmp
-	touch .tmp/empty.c
-	${CC} ${CFLAGS} -shared -fPIC -o .tmp/empty.so .tmp/empty.c
+$(TARGET): empty.o
+	${CC} ${CFLAGS} -shared -fPIC -o $(@) -DNVML_PATCH_319 -DNVML_VERSION=\"$(TARGET_VER)\" $< nvml_fix.c
 
-325.08: empty.so
-	cp .tmp/empty.so libnvidia-ml.so.325.08
-	mkdir -p built/325.08
-	${CC} ${CFLAGS} -shared -fPIC -o built/325.08/libnvidia-ml.so.1 -DNVML_PATCH_319 -DNVML_VERSION=\"325.08\" libnvidia-ml.so.325.08 nvml_fix.c
-	rm libnvidia-ml.so.325.08
 
-319.32: empty.so
-	cp .tmp/empty.so libnvidia-ml.so.319.32
-	mkdir -p built/319.32
-	${CC} ${CFLAGS} -shared -fPIC -o built/319.32/libnvidia-ml.so.1 -DNVML_PATCH_319 -DNVML_VERSION=\"319.32\" libnvidia-ml.so.319.32 nvml_fix.c
-	rm libnvidia-ml.so.319.32
+clean: 
+	rm -f $(TARGET)
+	rm -f empty.o 
 
-319.23: empty.so
-	cp .tmp/empty.so libnvidia-ml.so.319.23
-	mkdir -p built/319.23
-	${CC} ${CFLAGS} -shared -fPIC -o built/319.23/libnvidia-ml.so.1 -DNVML_PATCH_319 -DNVML_VERSION=\"319.23\" libnvidia-ml.so.319.23 nvml_fix.c
-	rm libnvidia-ml.so.319.23
+install: libnvidia-ml.so.1
+	$(INSTALL) -Dm644 $(^) $(libdir)/$(^)
 
-clean:
-	rm -rf empty.c *.so.* *.so built/ .tmp
+.PHONY: clean install all
