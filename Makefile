@@ -18,7 +18,7 @@ $(TARGET): ${TARGET:1=${TARGET_VER}}
 
 clean: 
 	rm -f $(TARGET)
-	rm -f empty.o 
+	rm -f ${TARGET:1=${TARGET_VER}}
 
 install: libnvidia-ml.so.1
 	$(INSTALL) -Dm755 $(^) $(libdir)/$(^)
