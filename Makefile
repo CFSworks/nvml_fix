@@ -21,6 +21,6 @@ clean:
 	rm -f empty.o 
 
 install: libnvidia-ml.so.1
-	$(INSTALL) -Dm644 $(^) $(libdir)/$(^)
+	$(INSTALL) -Dm755 $(^) $(libdir)/$(^)
 
 .PHONY: clean install all
