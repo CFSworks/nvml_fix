@@ -21,11 +21,13 @@ the device is in fact supported, and returns information properly.
 
 How to use
 ----------
-The makefile can be used with `make` to build shims the selected NVML version `make TARGET_VER=325.08`
+The makefile can be used to build shims for a given NVML version with `make TARGET_VER=325.08` - currently supported versions are:
+325.08, 319.32, 319.23
 To install, delete the `libnvidia-ml.so.1` symlink currently in your
-`/usr/lib` and run `make install PREFIX=/usr/lib`. Currently valid versions are: 325.08, 319.32 and 319.23.
+`/usr/lib` and copy the built `libnvidia-ml.so.1` in its place.
+Alternatively, run `make install TARGET_VER=325.08 PREFIX=/usr`.
 
-You can build 32-bit versions with `make CFLAGS=-m32`.
+If you are on a 64-bit system, you can build 32-bit versions with `make CFLAGS=-m32`.
 
 Note: The nVidia drivers are not a dependency for building the shims.
 
