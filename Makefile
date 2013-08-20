@@ -1,6 +1,6 @@
 CC            = gcc
 CFLAGS        =
-TARGET_VER    = 319.32# just set to a valid ver eg. one of:  325.08 319.32 319.23
+TARGET_VER    = 325.15# just set to a valid ver eg. one of:  325.08 325.15 319.32 319.23
 TARGET        = libnvidia-ml.so.1
 DESTDIR       = /
 PREFIX        = $(DESTDIR)usr/local
