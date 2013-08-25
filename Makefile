@@ -3,7 +3,7 @@ CFLAGS        =
 TARGET_VER    = 325.15# just set to a valid ver eg. one of:  325.08 325.15 319.32 319.23
 TARGET        = libnvidia-ml.so.1
 DESTDIR       = /
-PREFIX        = $(DESTDIR)usr/local
+PREFIX        = $(DESTDIR)usr
 libdir        = $(PREFIX)/lib
 INSTALL       = /usr/bin/install -D
 
