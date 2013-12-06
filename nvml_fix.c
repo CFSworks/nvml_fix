@@ -37,7 +37,7 @@ INIT(nvmlInit_v2)
 void fix_unsupported_bug(nvmlDevice_t device)
 {
 	unsigned int *fix = (unsigned int *)device;
-#ifdef NVML_PATCH_319
+#if defined(NVML_PATCH_319) || defined(NVML_PATCH_325)
 # ifdef __i386__
 	fix[201] = 1;
 	fix[202] = 1;
@@ -53,7 +53,7 @@ void fix_unsupported_bug(nvmlDevice_t device)
 	fix[188] = 1;
 # endif
 #else
-# error "No NVML_PATCH_* option specified!"
+# error "No valid NVML_PATCH_* option specified!"
 #endif
 }
 
