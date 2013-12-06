@@ -45,6 +45,13 @@ void fix_unsupported_bug(nvmlDevice_t device)
 	fix[202] = 1;
 	fix[203] = 1;
 # endif
+#elif defined(NVML_PATCH_331)
+# ifdef __i386__
+#  error "No i386 support for this version yet!"
+# else
+	fix[187] = 2;
+	fix[188] = 1;
+# endif
 #else
 # error "No NVML_PATCH_* option specified!"
 #endif
