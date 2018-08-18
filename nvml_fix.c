@@ -1,20 +1,31 @@
 #include <dlfcn.h>
 
+#if defined(NVML_PATCH_319) || defined(NVML_PATCH_325) || defined(NVML_PATCH_331)
 #include "nvml.h"
-
+#elif defined(NVML_PATCH_390)
+#include <nvml.h>
+#else
+#error "No valid NVML_PATCH_* option specified! Currently supported versions are: 319, 325, 331 (x86_64 only), 390 (x86_64 only)."
+#endif
 
 #define FUNC(f) static typeof(f) * real_##f;
 #define FUNC_v2(f) static typeof(f) * real_##f##_v2;
+
+#if defined(NVML_PATCH_319) || defined(NVML_PATCH_325) || defined(NVML_PATCH_331)
 FUNC(nvmlInit)
-FUNC_v2(nvmlInit)
 FUNC(nvmlDeviceGetHandleByIndex)
+FUNC(nvmlDeviceGetHandleByPciBusId)
+#elif defined(NVML_PATCH_390)
+FUNC(nvmlInitWithFlags);
+#endif
+FUNC_v2(nvmlInit)
 FUNC_v2(nvmlDeviceGetHandleByIndex)
 FUNC(nvmlDeviceGetHandleBySerial)
 FUNC(nvmlDeviceGetHandleByUUID)
-FUNC(nvmlDeviceGetHandleByPciBusId)
 FUNC_v2(nvmlDeviceGetHandleByPciBusId)
 
 #define LOAD(f) if (!(real_##f = dlsym(nvml, #f))) return NVML_ERROR_UNKNOWN
+#if defined(NVML_PATCH_319) || defined(NVML_PATCH_325) || defined(NVML_PATCH_331)
 #define INIT(name) nvmlReturn_t name() \
 { \
 	void *nvml = dlopen("libnvidia-ml.so." NVML_VERSION, RTLD_NOW); \
@@ -30,9 +41,41 @@ FUNC_v2(nvmlDeviceGetHandleByPciBusId)
 \
 	return real_##name(); \
 }
+#elif defined(NVML_PATCH_390)
+#define INIT(name) nvmlReturn_t name() \
+{ \
+void *nvml = dlopen("libnvidia-ml.so." NVML_VERSION, RTLD_NOW); \
+\
+	LOAD(nvmlInit_v2); \
+	LOAD(nvmlInitWithFlags); \
+	LOAD(nvmlDeviceGetHandleByIndex_v2); \
+	LOAD(nvmlDeviceGetHandleBySerial); \
+	LOAD(nvmlDeviceGetHandleByUUID); \
+	LOAD(nvmlDeviceGetHandleByPciBusId_v2); \
+\
+	return real_##name(); \
+}
+#endif
 
+#if defined(NVML_PATCH_319) || defined(NVML_PATCH_325) || defined(NVML_PATCH_331)
 INIT(nvmlInit)
+#endif
 INIT(nvmlInit_v2)
+
+#if defined(NVML_PATCH_390)
+nvmlReturn_t nvmlInitWithFlags(unsigned int flags) {
+	void *nvml = dlopen("libnvidia-ml.so." NVML_VERSION, RTLD_NOW);
+
+	LOAD(nvmlInit_v2);
+	LOAD(nvmlInitWithFlags);
+	LOAD(nvmlDeviceGetHandleByIndex_v2);
+	LOAD(nvmlDeviceGetHandleBySerial);
+	LOAD(nvmlDeviceGetHandleByUUID);
+	LOAD(nvmlDeviceGetHandleByPciBusId_v2);
+
+	return real_nvmlInitWithFlags(flags);
+}
+#endif
 
 void fix_unsupported_bug(nvmlDevice_t device)
 {
@@ -52,8 +95,13 @@ void fix_unsupported_bug(nvmlDevice_t device)
 	fix[187] = 2;
 	fix[188] = 1;
 # endif
-#else
-# error "No valid NVML_PATCH_* option specified!"
+#elif defined(NVML_PATCH_390)
+# ifdef __i386__
+#  error "No i386 support for this version yet!"
+# else
+	fix[352] = 1;
+	fix[353] = 1;
+# endif
 #endif
 }
 
@@ -73,9 +121,11 @@ nvmlReturn_t nvmlDeviceGetHandleBy##name(type x, nvmlDevice_t *device) \
 	return NVML_SUCCESS; \
 }
 
+#if defined(NVML_PATCH_319) || defined(NVML_PATCH_325) || defined(NVML_PATCH_331)
 GET_HANDLE_BY(Index, unsigned int)
+GET_HANDLE_BY(PciBusId, const char *)
+#endif
 GET_HANDLE_BY(Index_v2, unsigned int)
 GET_HANDLE_BY(Serial, const char *)
 GET_HANDLE_BY(UUID, const char *)
-GET_HANDLE_BY(PciBusId, const char *)
 GET_HANDLE_BY(PciBusId_v2, const char *)
