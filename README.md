@@ -21,14 +21,32 @@ the device is in fact supported, and returns information properly.
 
 How to use
 ----------
-The makefile can be used to build shims for a given NVML version with `make TARGET_VER=325.08` - currently supported versions are:
-325.08, 319.32, 319.23
-To install, delete the `libnvidia-ml.so.1` symlink currently in your
-`/usr/lib` and run `make install PREFIX=/usr`. Currently valid versions are: 325.15, 325.08, 319.32 and 319.23.
+The Makefile can be used to build shims for a given NVML version with `make TARGET_VER=major.minor`.
+The full *major.minor* value must be specified, so `TARGET_VER=390` isn't sufficient, but
+`TARGET_VER=390.48` is:  
+  * `make TARGET_VER=390.48`
+
+Currently supported versions are: 390.x (x86_64 only), 331.x (x86_64 only), 325.x, and 319.x, with the
+latest being the default.
+
+To install, delete the `libnvidia-ml.so.1` symlink currently in your `libdir` and run
+`make install libdir=/path/to/lib`:  
+  * `make install libdir=/usr/lib/x86_64-linux-gnu`
+
+Some common values for `libdir` are `/usr/lib`, `/usr/lib64` (32-bit and 64-bit rpm-based distros),
+`/usr/lib/i386-linux-gnu`, and `/usr/lib/x86_64-linux-gnu` (32-bit and 64-bit deb-based distros).
+
+On Debian-based distros an alternative to deleting the symlink is to use `dpkg-divert` to rename it
+(before running `make install`):  
+  * `sudo dpkg-divert --add --local --divert /usr/lib/x86_64-linux-gnu/libnvidia-ml.so.1.orig --rename
+/usr/lib/x86_64-linux-gnu/libnvidia-ml.so.1`
+
+The current Makefile defaults are `TARGET_VER=390.48 libdir=/usr/lib/x86_64-linux-gnu`.
 
 If you are on a 64-bit system, you can build 32-bit versions with `make CFLAGS=-m32`.
 
-Note: The nVidia drivers are not a dependency for building the shims.
+Note: The nVidia drivers are not a dependency for building the shims, but for 390.x and above the
+`nvml.h` header *must be installed* in gcc's include search path.
 
 Legal
 =====
