@@ -2,10 +2,10 @@
 
 #if defined(NVML_PATCH_319) || defined(NVML_PATCH_325) || defined(NVML_PATCH_331)
 #include "nvml.h"
-#elif defined(NVML_PATCH_390)
+#elif defined(NVML_PATCH_390) || defined(NVML_PATCH_396)
 #include <nvml.h>
 #else
-#error "No valid NVML_PATCH_* option specified! Currently supported versions are: 319, 325, 331 (x86_64 only), 390 (x86_64 only)."
+#error "No valid NVML_PATCH_* option specified! Currently supported versions are: 319, 325, 331 (x86_64 only), 390 (x86_64 only), 396 (x86_64 only)."
 #endif
 
 #define FUNC(f) static typeof(f) * real_##f;
@@ -15,7 +15,7 @@
 FUNC(nvmlInit)
 FUNC(nvmlDeviceGetHandleByIndex)
 FUNC(nvmlDeviceGetHandleByPciBusId)
-#elif defined(NVML_PATCH_390)
+#elif defined(NVML_PATCH_390) || defined(NVML_PATCH_396)
 FUNC(nvmlInitWithFlags);
 #endif
 FUNC_v2(nvmlInit)
@@ -41,7 +41,7 @@ FUNC_v2(nvmlDeviceGetHandleByPciBusId)
 \
 	return real_##name(); \
 }
-#elif defined(NVML_PATCH_390)
+#elif defined(NVML_PATCH_390) || defined(NVML_PATCH_396)
 #define INIT(name) nvmlReturn_t name() \
 { \
 void *nvml = dlopen("libnvidia-ml.so." NVML_VERSION, RTLD_NOW); \
@@ -62,7 +62,7 @@ INIT(nvmlInit)
 #endif
 INIT(nvmlInit_v2)
 
-#if defined(NVML_PATCH_390)
+#if defined(NVML_PATCH_390) || defined(NVML_PATCH_396)
 nvmlReturn_t nvmlInitWithFlags(unsigned int flags) {
 	void *nvml = dlopen("libnvidia-ml.so." NVML_VERSION, RTLD_NOW);
 
@@ -95,7 +95,7 @@ void fix_unsupported_bug(nvmlDevice_t device)
 	fix[187] = 2;
 	fix[188] = 1;
 # endif
-#elif defined(NVML_PATCH_390)
+#elif defined(NVML_PATCH_390) || defined(NVML_PATCH_396)
 # ifdef __i386__
 #  error "No i386 support for this version yet!"
 # else
