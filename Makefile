@@ -1,7 +1,7 @@
 CC            = gcc
 CFLAGS        =
 # just set TARGET_VER to a valid ver eg. one of:  390.48 325.08 325.15 319.32 319.23
-TARGET_VER    = 396.54
+TARGET_VER    = 410.73
 TARGET_MAJOR := $(shell echo ${TARGET_VER} | cut -d . --f=1)
 TARGET        = libnvidia-ml.so.1
 # change libdir below based on where libnvidia-ml.so.1 resides.
@@ -19,6 +19,7 @@ else ifeq ($(TARGET_MAJOR),325)
 else ifeq ($(TARGET_MAJOR),331)
 else ifeq ($(TARGET_MAJOR),390)
 else ifeq ($(TARGET_MAJOR),396)
+else ifeq ($(TARGET_MAJOR),410)
 else
 	$(error Driver major version $(TARGET_MAJOR) is not supported!)
 endif
