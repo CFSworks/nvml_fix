@@ -48,9 +48,6 @@ The current Makefile defaults are `TARGET_VER=418.43 libdir=/usr/lib/x86_64-linu
 
 If you are on a 64-bit system, you can build 32-bit versions with `make CFLAGS=-m32`.  
 
-Note: The nVidia drivers are not a dependency for building the shims, but for 390.x and above the
-`nvml.h` header *must be installed* in gcc's include search path.  
-
 Legal
 =====
 
