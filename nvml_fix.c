@@ -1,9 +1,9 @@
 #include <dlfcn.h>
 
 #if defined(NVML_PATCH_319) || defined(NVML_PATCH_325) || defined(NVML_PATCH_331)
-#include "nvml.h"
+#include "nvml_v3.h"
 #elif defined(NVML_PATCH_390) || defined(NVML_PATCH_396) || defined(NVML_PATCH_410) || defined(NVML_PATCH_415) || defined(NVML_PATCH_418)
-#include <nvml.h>
+#include "nvml_v9.h"
 #else
 #error "No valid NVML_PATCH_* option specified! Currently supported versions are: 418.x, 415.x, 410.x, 396.x, 390.x, 331.x, 325.x (x86_64 and i386), and 319.x (x86_64 and i386)."
 #endif
