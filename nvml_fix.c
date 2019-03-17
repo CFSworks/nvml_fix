@@ -2,10 +2,10 @@
 
 #if defined(NVML_PATCH_319) || defined(NVML_PATCH_325) || defined(NVML_PATCH_331)
 #include "nvml.h"
-#elif defined(NVML_PATCH_390) || defined(NVML_PATCH_396) || defined(NVML_PATCH_410)
+#elif defined(NVML_PATCH_390) || defined(NVML_PATCH_396) || defined(NVML_PATCH_410) || defined(NVML_PATCH_415) || defined(NVML_PATCH_418)
 #include <nvml.h>
 #else
-#error "No valid NVML_PATCH_* option specified! Currently supported versions are: 319, 325, 331 (x86_64 only), 390 (x86_64 only), 396 (x86_64 only), 410 (x86_64 only)."
+#error "No valid NVML_PATCH_* option specified! Currently supported versions are: 418.x, 415.x, 410.x, 396.x, 390.x, 331.x, 325.x (x86_64 and i386), and 319.x (x86_64 and i386)."
 #endif
 
 #define FUNC(f) static typeof(f) * real_##f;
@@ -15,7 +15,7 @@
 FUNC(nvmlInit)
 FUNC(nvmlDeviceGetHandleByIndex)
 FUNC(nvmlDeviceGetHandleByPciBusId)
-#elif defined(NVML_PATCH_390) || defined(NVML_PATCH_396) || defined(NVML_PATCH_410)
+#elif defined(NVML_PATCH_390) || defined(NVML_PATCH_396) || defined(NVML_PATCH_410) || defined(NVML_PATCH_415) || defined(NVML_PATCH_418)
 FUNC(nvmlInitWithFlags);
 #endif
 FUNC_v2(nvmlInit)
@@ -41,7 +41,7 @@ FUNC_v2(nvmlDeviceGetHandleByPciBusId)
 \
 	return real_##name(); \
 }
-#elif defined(NVML_PATCH_390) || defined(NVML_PATCH_396) || defined(NVML_PATCH_410)
+#elif defined(NVML_PATCH_390) || defined(NVML_PATCH_396) || defined(NVML_PATCH_410) || defined(NVML_PATCH_415) || defined(NVML_PATCH_418)
 #define INIT(name) nvmlReturn_t name() \
 { \
 void *nvml = dlopen("libnvidia-ml.so." NVML_VERSION, RTLD_NOW); \
@@ -62,7 +62,7 @@ INIT(nvmlInit)
 #endif
 INIT(nvmlInit_v2)
 
-#if defined(NVML_PATCH_390) || defined(NVML_PATCH_396) || defined(NVML_PATCH_410)
+#if defined(NVML_PATCH_390) || defined(NVML_PATCH_396) || defined(NVML_PATCH_410) || defined(NVML_PATCH_415) || defined(NVML_PATCH_418)
 nvmlReturn_t nvmlInitWithFlags(unsigned int flags) {
 	void *nvml = dlopen("libnvidia-ml.so." NVML_VERSION, RTLD_NOW);
 
@@ -102,7 +102,7 @@ void fix_unsupported_bug(nvmlDevice_t device)
 	fix[352] = 1;
 	fix[353] = 1;
 # endif
-#elif defined(NVML_PATCH_410)
+#elif defined(NVML_PATCH_410) || defined(NVML_PATCH_415) || defined(NVML_PATCH_418) || defined(NVML_PATCH_415) || defined(NVML_PATCH_418)
 # ifdef __i386__
 #  error "No i386 support for this version yet!"
 # else
