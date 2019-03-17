@@ -102,7 +102,7 @@ void fix_unsupported_bug(nvmlDevice_t device)
 	fix[352] = 1;
 	fix[353] = 1;
 # endif
-#elif defined(NVML_PATCH_410) || defined(NVML_PATCH_415) || defined(NVML_PATCH_418) || defined(NVML_PATCH_415) || defined(NVML_PATCH_418)
+#elif defined(NVML_PATCH_410) || defined(NVML_PATCH_415) || defined(NVML_PATCH_418)
 # ifdef __i386__
 #  error "No i386 support for this version yet!"
 # else
