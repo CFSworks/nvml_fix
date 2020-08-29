@@ -3,6 +3,7 @@ CFLAGS        =
 # just set TARGET_VER to a valid ver eg. one of:  390.48 325.08 325.15 319.32 319.23
 TARGET_VER    = 450.57
 TARGET_MAJOR := $(shell echo ${TARGET_VER} | cut -d . -f 1)
+TARGET_MINOR := $(shell echo ${TARGET_VER} | cut -d . -f 2)
 TARGET        = libnvidia-ml.so.1
 # change libdir below based on where libnvidia-ml.so.1 resides.
 # some common values are: /usr/lib, /usr/lib64, /usr/lib/i386-linux-gnu, /usr/lib/x86_64-linux-gnu
@@ -33,7 +34,7 @@ ${TARGET:1=${TARGET_VER}}: empty.c
 	${CC} ${CFLAGS} -shared -fPIC -s $(<) -o $(@) 
 
 $(TARGET): ${TARGET:1=${TARGET_VER}}
-	${CC} ${CFLAGS} -Wl,--no-as-needed -shared -fPIC -s -o $(@) -DNVML_PATCH_${TARGET_MAJOR} -DNVML_VERSION=\"$(TARGET_VER)\" $< nvml_fix.c
+	${CC} ${CFLAGS} -Wl,--no-as-needed -shared -fPIC -s -o $(@) -DNVML_PATCH_${TARGET_MAJOR} -DNVML_PATCH_MINOR=${TARGET_MINOR} -DNVML_VERSION=\"$(TARGET_VER)\" $< nvml_fix.c
 
 clean: 
 	rm -f $(TARGET)
