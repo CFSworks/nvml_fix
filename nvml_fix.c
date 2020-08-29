@@ -115,8 +115,13 @@ void fix_unsupported_bug(nvmlDevice_t device)
 # ifdef __i386__
 #  error "No i386 support for this version yet!"
 # else
+#  if NVML_PATCH_MINOR >= 66
+	fix[360] = 1;
+	fix[361] = 1;
+#  else
 	fix[364] = 1;
 	fix[365] = 1;
+#  endif
 # endif
 #endif
 }
