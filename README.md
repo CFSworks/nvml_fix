@@ -22,16 +22,16 @@ the device is in fact supported, and returns information properly.
 How to use
 ----------
 The Makefile can be used to build shims for a given NVML version with `make TARGET_VER=major.minor`.
-The full *major.minor* value must be specified, so `TARGET_VER=450` isn't sufficient, but
-`TARGET_VER=450.57` is:  
-  * `make TARGET_VER=450.57`  
+The full *major.minor* value must be specified, so `TARGET_VER=460` isn't sufficient, but
+`TARGET_VER=460.32.03` is:  
+  * `make TARGET_VER=460.32.03`  
 
-Currently supported versions are: 450.x, 440.x, 430.x, 418.x, 415.x, 410.x, 396.x, 390.x, 331.x,
-325.x (x86_64 and i386), and 319.x (x86_64 and i386), with the latest being the default.  
+Currently supported versions are: 460.x, 450.x, 440.x, 430.x, 418.x, 415.x, 410.x, 396.x, 390.x,
+331.x, 325.x (x86_64 and i386), and 319.x (x86_64 and i386), with the latest being the default.  
 
 To install, delete the `libnvidia-ml.so.1` symlink currently in your `libdir` and run
 `make install libdir=/path/to/lib`:  
-  * `sudo make install TARGET_VER=450.57 libdir=/usr/lib/x86_64-linux-gnu`  
+  * `sudo make install TARGET_VER=460.32.03 libdir=/usr/lib/x86_64-linux-gnu`  
 
 It is necessary to supply `TARGET_VER` during *both* `make` and `make install` if not using the default
 version.  
@@ -46,7 +46,7 @@ On Debian-based distros an alternative to deleting the symlink is to use `dpkg-d
   * `sudo dpkg-divert --add --local --divert /usr/lib/x86_64-linux-gnu/libnvidia-ml.so.1.orig --rename
 /usr/lib/x86_64-linux-gnu/libnvidia-ml.so.1`  
 
-The current Makefile defaults are `TARGET_VER=450.57 libdir=/usr/lib/x86_64-linux-gnu`.  
+The current Makefile defaults are `TARGET_VER=460.32.03 libdir=/usr/lib/x86_64-linux-gnu`.  
 
 If you are on a 64-bit system, you can build 32-bit versions with `make CFLAGS=-m32`.  
 
