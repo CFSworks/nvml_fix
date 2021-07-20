@@ -3,11 +3,11 @@
 #if defined(NVML_PATCH_319) || defined(NVML_PATCH_325) || defined(NVML_PATCH_331)
 #define NVML_V3
 #include "nvml_v3.h"
-#elif defined(NVML_PATCH_390) || defined(NVML_PATCH_396) || defined(NVML_PATCH_410) || defined(NVML_PATCH_415) || defined(NVML_PATCH_418) || defined(NVML_PATCH_430) || defined(NVML_PATCH_440) || defined(NVML_PATCH_450) || defined(NVML_PATCH_460)
+#elif defined(NVML_PATCH_390) || defined(NVML_PATCH_396) || defined(NVML_PATCH_410) || defined(NVML_PATCH_415) || defined(NVML_PATCH_418) || defined(NVML_PATCH_430) || defined(NVML_PATCH_440) || defined(NVML_PATCH_450) || defined(NVML_PATCH_460)|| defined(NVML_PATCH_470)
 #define NVML_V9
 #include "nvml_v9.h"
 #else
-#error "No valid NVML_PATCH_* option specified! Currently supported versions are: 460.x, 450.x, 440.x, 430.x, 418.x, 415.x, 410.x, 396.x, 390.x, 331.x, 325.x (x86_64 and i386), and 319.x (x86_64 and i386)."
+#error "No valid NVML_PATCH_* option specified! Currently supported versions are: 470.x, 460.x, 450.x, 440.x, 430.x, 418.x, 415.x, 410.x, 396.x, 390.x, 331.x, 325.x (x86_64 and i386), and 319.x (x86_64 and i386)."
 #endif
 
 #define FUNC(f) static typeof(f) * real_##f;
@@ -129,6 +129,13 @@ void fix_unsupported_bug(nvmlDevice_t device)
 # else
 	fix[360] = 1;
 	fix[361] = 1;
+# endif
+#elif defined(NVML_PATCH_470)
+# ifdef __i386__
+#  error "No i386 support for this version yet!"
+# else
+	fix[362] = 1;
+	fix[363] = 1;
 # endif
 #endif
 }
