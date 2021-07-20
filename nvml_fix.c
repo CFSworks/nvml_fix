@@ -3,7 +3,7 @@
 #if defined(NVML_PATCH_319) || defined(NVML_PATCH_325) || defined(NVML_PATCH_331)
 #define NVML_V3
 #include "nvml_v3.h"
-#elif defined(NVML_PATCH_390) || defined(NVML_PATCH_396) || defined(NVML_PATCH_410) || defined(NVML_PATCH_415) || defined(NVML_PATCH_418) || defined(NVML_PATCH_430) || defined(NVML_PATCH_440) || defined(NVML_PATCH_450) || defined(NVML_PATCH_460)|| defined(NVML_PATCH_470)
+#elif defined(NVML_PATCH_390) || defined(NVML_PATCH_396) || defined(NVML_PATCH_410) || defined(NVML_PATCH_415) || defined(NVML_PATCH_418) || defined(NVML_PATCH_430) || defined(NVML_PATCH_440) || defined(NVML_PATCH_450) || defined(NVML_PATCH_460) || defined(NVML_PATCH_470)
 #define NVML_V9
 #include "nvml_v9.h"
 #else
@@ -105,38 +105,22 @@ void fix_unsupported_bug(nvmlDevice_t device)
 	fix[353] = 1;
 # endif
 #elif defined(NVML_PATCH_410) || defined(NVML_PATCH_415) || defined(NVML_PATCH_418) || defined(NVML_PATCH_430) || defined(NVML_PATCH_440)
-# ifdef __i386__
-#  error "No i386 support for this version yet!"
-# else
 	fix[362] = 1;
 	fix[363] = 1;
-# endif
 #elif defined(NVML_PATCH_450)
-# ifdef __i386__
-#  error "No i386 support for this version yet!"
-# else
-#  if NVML_PATCH_MINOR >= 66
+# if NVML_PATCH_MINOR >= 66
 	fix[360] = 1;
 	fix[361] = 1;
-#  else
+# else
 	fix[364] = 1;
 	fix[365] = 1;
-#  endif
 # endif
 #elif defined(NVML_PATCH_460)
-# ifdef __i386__
-#  error "No i386 support for this version yet!"
-# else
 	fix[360] = 1;
 	fix[361] = 1;
-# endif
 #elif defined(NVML_PATCH_470)
-# ifdef __i386__
-#  error "No i386 support for this version yet!"
-# else
 	fix[362] = 1;
 	fix[363] = 1;
-# endif
 #endif
 }
 
